@@ -1,0 +1,64 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js, Express, MongoDB</title>
+</head>
+<body>
+  <h1>Item List</h1>
+
+  <form id="itemForm">
+    <input type="text" id="name" placeholder="Item Name" required><br>
+    <input type="text" id="description" placeholder="Item Description"><br>
+    <input type="number" id="price" placeholder="Price" required><br>
+    <button type="submit">Add Item</button>
+  </form>
+
+  <h2>Items</h2>
+  <ul id="itemList"></ul>
+
+  <script>
+    // Fetch and display items from MongoDB
+    async function getItems() {
+      const response = await fetch('/items');
+      const items = await response.json();
+      const itemList = document.getElementById('itemList');
+      itemList.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - ${item.description} - $${item.price}`;
+        itemList.appendChild(li);
+      });
+    }
+
+    // Handle form submission
+    document.getElementById('itemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const description = document.getElementById('description').value;
+      const price = document.getElementById('price').value;
+
+      const response = await fetch('/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, description, price }),
+      });
+
+      if (response.ok) {
+        alert('Item added successfully!');
+        getItems(); // Refresh item list
+      } else {
+        alert('Failed to add item');
+      }
+    });
+
+    // Get items initially
+    getItems();
+  </script>
+</body>
+</html>

